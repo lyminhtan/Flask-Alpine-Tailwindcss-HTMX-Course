@@ -5,9 +5,9 @@ from .urls import bp
 
 
 feeds = {
-    "https://blog.teclado.com/rss/": {
+    "https://blog.teclado.com/rss": {
         "title": "Teclado",
-        "href": "https://blog.teclado.com/rss/",
+        "href": "https://blog.teclado.com/rss",
         "show_images": True,
         "entries": {},
     },
@@ -17,20 +17,23 @@ feeds = {
         "show_images": False,
         "entries": {},
     },
-    # "https://snarky.ca/rss/": {
+    # "https://snarky.ca/rss": {
     #     "title": "Snarky",
-    #     "href": "https://snarky.ca/rss/",
+    #     "href": "https://snarky.ca/rss",
     #     "show_images": False,
     #     "entries": {},
     # },
 }
 
+@bp.route("/login", methods=["GET"])
+def login():
+    return render_template("login.html")
 
 # Create your views here.
 @bp.route("", endpoint="homepage", methods=["GET"])
 @bp.route("/feed/<path:feed_url>", methods=["GET"])
 def render_feed(feed_url: str = None):
-
+    print(request.environ.get('user'))
     for url, feed_ in feeds.items():
         if feed_["entries"]:
             pass

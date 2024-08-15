@@ -6,6 +6,7 @@ from werkzeug.exceptions import HTTPException
 from flask import Flask, jsonify, make_response, render_template, request, Blueprint
 import jinja_partials
 from django.conf import settings
+from .middlewares import Middleware, AnotherMiddleware
 
 
 def create_app(test_config=None, db_path=None) -> Flask:
@@ -44,6 +45,10 @@ def create_app(test_config=None, db_path=None) -> Flask:
 
     # Register Jinja Partials
     jinja_partials.register_extensions(app)
+
+    # Register Middleware (in reverse order)
+    app.wsgi_app = AnotherMiddleware(app.wsgi_app)
+    app.wsgi_app = Middleware(app.wsgi_app)
 
     # Register Blueprints
     from app_sample.urls import bp as sample_bp
